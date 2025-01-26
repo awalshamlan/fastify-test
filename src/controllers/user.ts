@@ -1,6 +1,6 @@
-import { FastifyInstance, FastifyServerOptions } from "fastify";
-import { getUserProfile, login, registerUser, UserInputDTO, UserOutputDTO, validateToken } from "../models/user.model";
-import { Type, TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import type { FastifyInstance, FastifyServerOptions } from "fastify";
+import { getUserProfile, login, registerUser, type TokenPayload, UserInputDTO, UserOutputDTO, validateToken } from "../models/user.model";
+import { Type, type TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 
 
 async function routes(server: FastifyInstance, _opts: FastifyServerOptions) {
@@ -39,11 +39,11 @@ async function routes(server: FastifyInstance, _opts: FastifyServerOptions) {
             // TODO: move this auth to a middleware
             // auth start
             const token = req.headers.token
-            if (!token || typeof (token) != "string") {
+            if (!token || typeof (token) !== "string") {
                 res.status(401);
                 return res.send();
             }
-            let tokenPayload
+            let tokenPayload: TokenPayload
             try {
                 tokenPayload = validateToken(token)
             } catch (err) {

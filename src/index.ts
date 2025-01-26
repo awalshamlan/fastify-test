@@ -1,4 +1,4 @@
-import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import Fastify from "fastify";
 import routes from "./controllers/user";
 
@@ -8,7 +8,7 @@ const server = Fastify({
 
 
 server.listen({ port: 3000 },
-    function (err, _address) {
+    (err, _address) => {
         if (err) {
             server.log.error(err);
             process.exit(1);
@@ -18,7 +18,7 @@ server.listen({ port: 3000 },
 
 server.register(routes)
 
-server.get("/", (_req, res)=>{
+server.get("/", (_req, res) => {
     res.send("Hello from fastify!")
 })
 

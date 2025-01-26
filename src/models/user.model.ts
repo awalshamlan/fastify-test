@@ -1,4 +1,4 @@
-import { Static, Type } from "@sinclair/typebox";
+import { type Static, Type } from "@sinclair/typebox";
 import { mysqlTable, serial, varchar } from "drizzle-orm/mysql-core";
 import jwt from "jsonwebtoken"
 import { eq } from "drizzle-orm"
@@ -9,7 +9,7 @@ import server from "..";
 import { uuid } from "drizzle-orm/pg-core";
 
 const secret_key = process.env.JWT_SECRET_KEY
-type TokenPayload = {
+export type TokenPayload = {
     id: string,
     time: string
 }
@@ -66,12 +66,12 @@ export async function login(input: Static<typeof UserInputDTO>): Promise<string>
         throw new Error("Unauthorized");
     }
     const hashAttempt = sha256SaltedHash(input.password, userData.salt);
-    if (hashAttempt != userData.hash) {
+    if (hashAttempt !== userData.hash) {
         throw new Error("Unauthorized");
     }
     // guard clause end; generate jwt
 
-    if (typeof (secret_key) != 'string') {
+    if (typeof (secret_key) !== 'string') {
         throw new Error("Secret key missing");
     }
     const data: TokenPayload = { time: Date(), id: userData.uuid }
@@ -108,7 +108,7 @@ function sha256SaltedHash(password: string, salt: string) {
 }
 
 export function validateToken(token: string) {
-    if (typeof (secret_key) != 'string') {
+    if (typeof (secret_key) !== 'string') {
         throw new Error("Secret key missing");
     }
     return jwt.verify(token, secret_key) as TokenPayload
