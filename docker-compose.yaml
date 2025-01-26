@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: .
+    network_mode: host
+    env_file: .env
+  migrate:
+    build:
+      context: .
+      target: builder
+    command: sh -c "cd src && npx drizzle-kit migrate"
+    env_file: .env
+    depends_on:
+      - mysql
+    restart: on-failure:10
+    network_mode: host
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_DATABASE: test
+    network_mode: host
+  
